@@ -34,7 +34,7 @@ async fn main() {
 
     let config_path = match args.config_path {
         Some(v) => v,
-        None => "/etc/inrs/config.toml".to_string(),
+        None => "/etc/ifrs/config.toml".to_string(),
     };
 
     // Read or create config file
