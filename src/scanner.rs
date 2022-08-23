@@ -1,9 +1,33 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc, vec};
 
 use log::{debug, error, info, trace};
 use tokio::task;
 
 use crate::action::{match_code, Action};
+
+pub async fn start_discover(device: infrared_rs::Scanner) -> Result<(), infrared_rs::Error> {
+    println!("Press the desired button to get started.\nHint: the most likely correct code will be selected automatically.");
+    // Store each result in a hash map to keep track of the most common code
+    let mut result_set: HashMap<u64, u8> = HashMap::new();
+    // Allow infrared input 10 times
+    for step in 0..10 {
+        let code = device.scan_blocking()?;
+        *result_set.entry(code).or_default() += 1;
+        println!("[{:01}] => {code}", step);
+    }
+    // Calculate the most common value in the hash map (this is likely the correct code)
+    let result = result_set
+        .into_iter()
+        .max_by_key(|(_, occurences)| *occurences)
+        .unwrap()
+        .0;
+
+    println!(
+        "=== Result from inputs ===\n{}",
+        result
+    );
+    Ok(())
+}
 
 pub async fn start_scan(
     client: smarthome_sdk_rs::Client,

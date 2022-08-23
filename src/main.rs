@@ -21,6 +21,10 @@ struct Args {
     /// The path where the configuration file should be located
     #[clap(short, long, value_parser)]
     config_path: Option<String>,
+
+    /// Discover mode is used to set up new buttons of a remote
+    #[clap(short, long, value_parser)]
+    discover: bool,
 }
 
 #[tokio::main]
@@ -30,7 +34,7 @@ async fn main() {
 
     let config_path = match args.config_path {
         Some(v) => v,
-        None => "/etc/inrs/config.toml".to_string()
+        None => "/etc/inrs/config.toml".to_string(),
     };
 
     // Read or create config file
@@ -110,9 +114,20 @@ async fn main() {
         }
     };
 
-    // Start the blocking scanner loop
-    if let Err(err) = scanner::start_scan(client, scanner, &conf.actions).await {
-        error!("Scanner failed unexpectedly: {err}");
-        process::exit(1);
+    match args.discover {
+        true => {
+            // Start the discovery function
+            if let Err(err) = scanner::start_discover(scanner).await {
+                error!("Scanner failed unexpectedly: {err}");
+                process::exit(1);
+            }
+        }
+        false => {
+            // Start the blocking scanner loop
+            if let Err(err) = scanner::start_scan(client, scanner, &conf.actions).await {
+                error!("Scanner failed unexpectedly: {err}");
+                process::exit(1);
+            }
+        }
     }
 }
