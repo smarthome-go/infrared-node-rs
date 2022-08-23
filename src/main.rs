@@ -1,5 +1,6 @@
 use std::process;
 
+use clap::Parser;
 use config::Error;
 use log::{debug, error, warn};
 
@@ -9,16 +10,36 @@ mod action;
 mod config;
 mod scanner;
 
+#[derive(Parser, Debug)]
+#[clap(
+    author,
+    version,
+    about,
+    long_about = "Raspberry-Pi microservice for Smarthome that allows IR control"
+)]
+struct Args {
+    /// The path where the configuration file should be located
+    #[clap(short, long, value_parser)]
+    config_path: Option<String>,
+}
+
 #[tokio::main]
 async fn main() {
     env_logger::init();
+    let args = Args::parse();
+
+    let config_path = match args.config_path {
+        Some(v) => v,
+        None => "/etc/inrs/config.toml".to_string()
+    };
 
     // Read or create config file
-    let conf = match config::read_config("./default_config.toml") {
+    let conf = match config::read_config(&config_path) {
         Ok(c) => c,
         Err(e) => {
             error!(
-                "Could not read config file: {}",
+                "Could not read or create config file (at {}): {}",
+                config_path,
                 match e {
                     Error::IO(e) => format!("IO error: {e}"),
                     Error::Parse(e) => format!("invalid TOML syntax: {e}"),
