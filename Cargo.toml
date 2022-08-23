@@ -1,3 +1,6 @@
+[profile.release]
+strip = true
+
 [package]
 name = "infrared-node-rs"
 version = "0.1.0"
@@ -6,6 +9,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+env_logger = "0.9.0"
 infrared-rs = "0.2.0"
+log = "0.4.17"
 serde = "1.0.144"
-smarthome-sdk-rs = "0.1.0"
+smarthome-sdk-rs = "0.2.0"
+tokio = "1.20.1"
+toml = "0.5.9"

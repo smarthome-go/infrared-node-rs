@@ -1,0 +1,17 @@
+[smarthome]
+url = "http://smarthome.box"
+token = "your-token"
+
+[hardware]
+enabled = false
+pin = 0
+
+[[actions]]
+name = "default"
+code = 101
+homescript = "print('Homescript')"
+
+[[actions]]
+name = "default"
+code = 101
+homescript = "print('Homescript')"
