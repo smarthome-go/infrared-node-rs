@@ -39,7 +39,7 @@ package: build
 
 
 
-release: clean lint build
+release: clean lint package
 
 gh-release:
 	gh release create v$(version) ./build/*.tar.gz -F ./CHANGELOG.md -t 'Infrared Node v$(version)'
