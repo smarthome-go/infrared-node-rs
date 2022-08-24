@@ -24,3 +24,23 @@ OPTIONS:
             Print version information
 pi@raspberrypi ~>
 ```
+
+## Configuration
+The default configuration file can be found [here](./src/default_config.toml).
+```toml
+# Smarthome server configuration
+[smarthome]
+url = "http://smarthome.box"        # Fully-qualified root URL of the main server
+token = "your-token"                # Authentication token for (navigate to `http://url/profile` to obtain a token)
+
+# Hardware configuration
+[hardware]
+enabled = false                     # If the infrared scanner should be initialized on startup
+pin = 0                             # The BCM pin number on which the infrared scanner is attached
+
+# Button actions can be configured here
+[[actions]]
+name = "default"                    # A name which describes your action well
+triggers = [101]                    # A list of numbers (the codes which match the action), multiple codes can correspond to one action
+homescript = "print('Homescript')"  # The Homescript code which is executed when the action was matched (validated on startup)
+```
