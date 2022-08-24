@@ -1,5 +1,8 @@
 version := 0.1.0
 
+clean:
+	rm -rf build
+
 lint:
 	cargo clippy
 	typos
@@ -36,7 +39,7 @@ package: build
 
 
 
-release: lint build
+release: clean lint build
 
 gh-release:
 	gh release create v$(version) ./build/*.tar.gz -F ./CHANGELOG.md -t 'Infrared Node v$(version)'
