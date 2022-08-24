@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Action {
     pub name: String,
-    pub code: u64,
+    pub triggers: Vec<u64>,
     pub homescript: String,
 }
 
@@ -13,21 +13,21 @@ impl Default for Action {
     fn default() -> Self {
         Self {
             name: "default".to_string(),
-            code: 101,
+            triggers: vec![101],
             homescript: "print('Homescript')".to_string(),
         }
     }
 }
 
-pub struct ActionExecRes {
+pub struct ActionExecRes<'act> {
     pub result: smarthome_sdk_rs::HomescriptExecResponse,
-    pub code: u64,
+    pub name: &'act str,
 }
 
-pub async fn test_setup(
-    actions: &Vec<Action>,
+pub async fn test_setup<'act>(
+    actions: &'act Vec<Action>,
     client: &smarthome_sdk_rs::Client,
-) -> Result<Vec<ActionExecRes>, smarthome_sdk_rs::Error> {
+) -> Result<Vec<ActionExecRes<'act>>, smarthome_sdk_rs::Error> {
     let mut results = vec![];
 
     for action in actions {
@@ -35,7 +35,7 @@ pub async fn test_setup(
             result: client
                 .exec_homescript_code(action.homescript.clone(), vec![], true)
                 .await?,
-            code: action.code,
+            name: &action.name,
         })
     }
 
@@ -43,6 +43,8 @@ pub async fn test_setup(
 }
 
 #[inline]
-pub fn match_code(actions: &Vec<Action>, code: u64) -> Option<&Action> {
-    actions.into_iter().find(|a| a.code == code)
+pub fn match_code(actions: &[Action], code: u64) -> Option<&Action> {
+    actions
+        .iter()
+        .find(|action| action.triggers.iter().any(|cod| *cod == code))
 }

@@ -75,13 +75,13 @@ async fn main() {
                     true => {
                         debug!(
                             "Check successful: Homescript of action@{} is working",
-                            res.code
+                            res.name
                         );
                     }
                     false => {
                         error!(
                             "Check failed: Homescript of action@{} contains potential issues:\n{}",
-                            res.code,
+                            res.name,
                             res.result
                                 .errors
                                 .into_iter()

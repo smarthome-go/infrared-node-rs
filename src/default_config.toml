@@ -1,17 +1,24 @@
+# Smarthome server configuration
 [smarthome]
-url = "http://smarthome.box"
-token = "your-token"
+url = "http://smarthome.box"        # Fully-qualified root URL of the main server
+token = "your-token"                # Authentication token for (navigate to `http://url/profile` to obtain a token)
 
+# Hardware configuration
 [hardware]
-enabled = false
-pin = 0
+enabled = false                     # If the infrared scanner should be intialized on startup
+pin = 0                             # The BCM pin number on which the infrared scanner is attached
 
+# Button actions can be configured here
 [[actions]]
-name = "default"
-code = 101
-homescript = "print('Homescript')"
+name = "default"                    # A name which describes your action well
+triggers = [101]                    # A list of numbers (the codes which match the action), multiple codes can correspond to one action
+homescript = "print('Homescript')"  # The Homescript code which is executed when the action was matched (validated on startup)
 
-[[actions]]
-name = "default"
-code = 101
-homescript = "print('Homescript')"
+# Add as many actions as desired
+#
+#   [[actions]]
+#   name = "default 2"
+#   triggers = [102]
+#   homescript = "print('Homescript')"
+#
+#

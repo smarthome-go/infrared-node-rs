@@ -32,7 +32,7 @@ pub async fn start_discover(device: infrared_rs::Scanner) -> Result<(), infrared
 pub async fn start_scan(
     client: smarthome_sdk_rs::Client,
     device: infrared_rs::Scanner,
-    actions: &Vec<Action>,
+    actions: &[Action],
 ) -> Result<(), infrared_rs::Error> {
     debug!("Waiting for infrared input...");
 
@@ -68,13 +68,13 @@ async fn handle_action(client: Arc<smarthome_sdk_rs::Client>, action: Action) {
             true => {
                 debug!(
                     "Successfully executed Homescript of action@{}: {}",
-                    action.code, res.output,
+                    action.name, res.output,
                 );
             }
             false => {
                 error!(
                     "HMS execution: action@{} failed with errors:\n{}",
-                    action.code,
+                    action.name,
                     res.errors
                         .into_iter()
                         .map(|r| r.to_string())
