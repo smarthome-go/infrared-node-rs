@@ -34,8 +34,8 @@ package: build
 	cp target/arm-unknown-linux-musleabihf/release/infrared-node-rs build/armv7
 	cp target/armv7-unknown-linux-musleabihf/release/infrared-node-rs build/arm
 	# Create tar archives from the build directories
-	cd build && tar -cvzf arm.tar.gz arm --remove-files
-	cd build && tar -cvzf armv7.tar.gz armv7 --remove-files
+	cd build && tar -cvzf ifrs_v$(version)_arm.tar.gz arm --remove-files
+	cd build && tar -cvzf ifrs_v$(version)_armv7.tar.gz armv7 --remove-files
 
 
 
