@@ -22,11 +22,17 @@ package: build
 	# Create a fresh build directory
 	mkdir -p build/arm
 	mkdir -p build/armv7
+	cp CHANGELOG.md build/arm
+	cp CHANGELOG.md build/armv7
+	cp install.sh build/arm
+	cp install.sh build/armv7
+	cp ifrs.service build/arm
+	cp ifrs.service build/armv7
 	cp target/arm-unknown-linux-musleabihf/release/infrared-node-rs build/armv7
 	cp target/armv7-unknown-linux-musleabihf/release/infrared-node-rs build/arm
 	# Create tar archives from the build directories
-	tar -cvzf build/arm.tar.gz build/arm --remove-files
-	tar -cvzf build/armv7.tar.gz build/armv7 --remove-files
+	cd build && tar -cvzf arm.tar.gz arm --remove-files
+	cd build && tar -cvzf armv7.tar.gz armv7 --remove-files
 
 
 

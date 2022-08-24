@@ -5,7 +5,7 @@ echo -e "\x1b[1;34minstallation is running\x1b[1;0m"
 
 sudo mkdir -p /etc/ifrs/
 sudo chown -R pi /etc/ifrs/ || exit 1
-mv ./infrared-node-rs /usr/bin/ifrs || exit 1
+sudo mv ./infrared-node-rs /usr/bin/ifrs || exit 1
 sudo cp ./ifrs.service /lib/systemd/system/ifrs.service || exit 1
 
 # Reload Systemd

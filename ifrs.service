@@ -1,0 +1,16 @@
+[Unit]
+Description=Raspberry-Pi microservice for Smarthome that allows IR control
+Documentation=https://github.com/smarthome-go/infrared-node-rs
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+ExecStart=/usr/bin/ifrs
+Restart=always
+Environment=RUST_LOG=INFO
+
+[Install]
+WantedBy=multi-user.target
