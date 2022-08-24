@@ -5,7 +5,7 @@ token = "your-token"                # Authentication token for (navigate to `htt
 
 # Hardware configuration
 [hardware]
-enabled = false                     # If the infrared scanner should be intialized on startup
+enabled = false                     # If the infrared scanner should be initialized on startup
 pin = 0                             # The BCM pin number on which the infrared scanner is attached
 
 # Button actions can be configured here

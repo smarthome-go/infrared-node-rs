@@ -18,7 +18,7 @@ pub async fn start_discover(device: infrared_rs::Scanner) -> Result<(), infrared
     // Calculate the most common value in the hash map (this is likely the correct code)
     let result = result_set
         .into_iter()
-        .max_by_key(|(_, occurences)| *occurences)
+        .max_by_key(|(_, occurrences)| *occurrences)
         .unwrap()
         .0;
 
