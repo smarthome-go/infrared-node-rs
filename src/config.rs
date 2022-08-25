@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::action::Action;
 
-
 #[derive(Deserialize, Serialize)]
 pub struct Config {
     pub smarthome: SmarthomeConfig,

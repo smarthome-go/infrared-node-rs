@@ -1,6 +1,5 @@
-use std::vec;
-
 use serde::{Deserialize, Serialize};
+use smarthome_sdk_rs::{Client, Error, HomescriptExecResponse};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Action {
@@ -20,14 +19,14 @@ impl Default for Action {
 }
 
 pub struct ActionExecRes<'act> {
-    pub result: smarthome_sdk_rs::HomescriptExecResponse,
+    pub result: HomescriptExecResponse,
     pub name: &'act str,
 }
 
-pub async fn test_setup<'act>(
+pub async fn lint_actions<'act>(
     actions: &'act Vec<Action>,
-    client: &smarthome_sdk_rs::Client,
-) -> Result<Vec<ActionExecRes<'act>>, smarthome_sdk_rs::Error> {
+    client: &Client,
+) -> Result<Vec<ActionExecRes<'act>>, Error> {
     let mut results = vec![];
 
     for action in actions {

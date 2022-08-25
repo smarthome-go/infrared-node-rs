@@ -11,11 +11,7 @@ mod config;
 mod scanner;
 
 #[derive(Parser, Debug)]
-#[clap(
-    author,
-    version,
-    about,
-)]
+#[clap(author, version, about)]
 struct Args {
     /// The path where the configuration file should be located
     #[clap(short, long, value_parser)]
@@ -33,6 +29,7 @@ async fn main() {
 
     let config_path = match args.config_path {
         Some(v) => v,
+        // Default configuration file location is defined here
         None => "/etc/ifrs/config.toml".to_string(),
     };
 
@@ -41,8 +38,7 @@ async fn main() {
         Ok(c) => c,
         Err(e) => {
             error!(
-                "Could not read or create config file (at {}): {}",
-                config_path,
+                "Could not read nor create config file (at {config_path}): {}",
                 match e {
                     Error::IO(e) => format!("IO error: {e}"),
                     Error::Parse(e) => format!("invalid TOML syntax: {e}"),
@@ -61,13 +57,16 @@ async fn main() {
     {
         Ok(c) => c,
         Err(e) => {
-            error!("Could not establish Smarthome connection: {:?}", e);
+            error!(
+                "Could not create Smarthome client: failed to establish connection: {:?}",
+                e
+            );
             process::exit(1);
         }
     };
 
     // Execute all action Homescripts in order to validate their correctness
-    match action::test_setup(&conf.actions, &client).await {
+    match action::lint_actions(&conf.actions, &client).await {
         Ok(results) => {
             for res in results {
                 match res.result.success {

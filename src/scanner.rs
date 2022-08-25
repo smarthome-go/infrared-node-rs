@@ -1,11 +1,12 @@
-use std::{collections::HashMap, sync::Arc, vec};
-
+use infrared_rs::{Error, Scanner};
 use log::{debug, error, info, trace};
+use smarthome_sdk_rs::Client;
+use std::{collections::HashMap, sync::Arc};
 use tokio::task;
 
 use crate::action::{match_code, Action};
 
-pub async fn start_discover(device: infrared_rs::Scanner) -> Result<(), infrared_rs::Error> {
+pub async fn start_discover(device: Scanner) -> Result<(), Error> {
     println!("Press the desired button to get started.\nHint: the most likely correct code will be selected automatically.");
     // Store each result in a hash map to keep track of the most common code
     let mut result_set: HashMap<u64, u8> = HashMap::new();
@@ -22,18 +23,11 @@ pub async fn start_discover(device: infrared_rs::Scanner) -> Result<(), infrared
         .unwrap()
         .0;
 
-    println!(
-        "=== Result from inputs ===\n{}",
-        result
-    );
+    println!("=== Result from inputs ===\n{}", result);
     Ok(())
 }
 
-pub async fn start_scan(
-    client: smarthome_sdk_rs::Client,
-    device: infrared_rs::Scanner,
-    actions: &[Action],
-) -> Result<(), infrared_rs::Error> {
+pub async fn start_scan(client: Client, device: Scanner, actions: &[Action]) -> Result<(), Error> {
     debug!("Waiting for infrared input...");
 
     let c = Arc::new(client);
