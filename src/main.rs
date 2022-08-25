@@ -10,7 +10,7 @@ mod action;
 mod config;
 mod scanner;
 
-#[derive(Parser, Debug)]
+#[derive(Parser)]
 #[clap(author, version, about)]
 struct Args {
     /// The path where the configuration file should be located
