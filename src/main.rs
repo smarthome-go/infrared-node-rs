@@ -15,7 +15,6 @@ mod scanner;
     author,
     version,
     about,
-    long_about = "Raspberry-Pi microservice for Smarthome that allows IR control"
 )]
 struct Args {
     /// The path where the configuration file should be located
