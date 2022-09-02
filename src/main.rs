@@ -5,6 +5,7 @@ use config::Error;
 use log::{debug, error, warn};
 
 use infrared_rs::Scanner;
+use smarthome_sdk_rs::{Auth, Client};
 
 mod action;
 mod config;
@@ -27,21 +28,22 @@ async fn main() {
     env_logger::init();
     let args = Args::parse();
 
+    // Select the configuration file's path and override it when required
     let config_path = match args.config_path {
         Some(v) => v,
         // Default configuration file location is defined here
         None => "/etc/ifrs/config.toml".to_string(),
     };
 
-    // Read or create config file
+    // Read or create the configuration file
     let conf = match config::read_config(&config_path) {
-        Ok(c) => c,
-        Err(e) => {
+        Ok(conf) => conf,
+        Err(err) => {
             error!(
                 "Could not read nor create config file (at {config_path}): {}",
-                match e {
-                    Error::IO(e) => format!("IO error: {e}"),
-                    Error::Parse(e) => format!("invalid TOML syntax: {e}"),
+                match err {
+                    Error::IO(err) => format!("IO error: {err}"),
+                    Error::Parse(err) => format!("invalid TOML syntax: {err}"),
                 }
             );
             process::exit(1);
@@ -49,21 +51,17 @@ async fn main() {
     };
 
     // Create the Smarthome SDK client
-    let client = match smarthome_sdk_rs::Client::new(
-        &conf.smarthome.url,
-        smarthome_sdk_rs::Auth::QueryToken(conf.smarthome.token),
-    )
-    .await
-    {
-        Ok(c) => c,
-        Err(e) => {
-            error!(
-                "Could not create Smarthome client: failed to establish connection: {:?}",
-                e
-            );
-            process::exit(1);
-        }
-    };
+    let client =
+        match Client::new(&conf.smarthome.url, Auth::QueryToken(conf.smarthome.token)).await {
+            Ok(c) => c,
+            Err(e) => {
+                error!(
+                    "Could not create Smarthome client: failed to establish connection: {:?}",
+                    e
+                );
+                process::exit(1);
+            }
+        };
 
     // Execute all action Homescripts in order to validate their correctness
     match action::lint_actions(&conf.actions, &client).await {
@@ -97,7 +95,7 @@ async fn main() {
         ),
     };
 
-    // If hardware is disabled, stop here
+    // If the hardware is disabled, stop here
     if !conf.hardware.enabled {
         warn!("Hardware is currently disabled, exiting...");
         process::exit(0);
@@ -112,6 +110,7 @@ async fn main() {
         }
     };
 
+    // Start the scanner or enter discover mode based on the args
     match args.discover {
         true => {
             // Start the discovery function
