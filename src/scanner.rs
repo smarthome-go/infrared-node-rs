@@ -30,18 +30,18 @@ pub async fn start_discover(device: Scanner) -> Result<(), Error> {
 pub async fn start_scan(client: Client, device: Scanner, actions: &[Action]) -> Result<(), Error> {
     debug!("Waiting for infrared input...");
 
-    let c = Arc::new(client);
+    let client_arc = Arc::new(client);
 
     loop {
         let code = device.scan_blocking()?;
         debug!("Infrared: received code {code}");
 
         match match_code(actions, code) {
-            Some(a) => {
-                info!("Matched received code {code} to action {}", a.name);
+            Some(action) => {
+                info!("Matched received code {code} to action {}", action.name);
                 // Spawn a tokio task for the action which is handled by the task without blocking
                 // concurrent operation
-                task::spawn(handle_action(c.clone(), a.clone()));
+                task::spawn(handle_action(Arc::clone(&client_arc), action.clone()));
             }
             None => {
                 debug!("")
