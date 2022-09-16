@@ -52,7 +52,7 @@ pub async fn start_scan(client: Client, device: Scanner, actions: &[Action]) -> 
 
 /// Wrapper which executes the homescript of the provided action
 /// Is spawned as a tokio task in order to allow concurrent action execution
-async fn handle_action(client: Arc<smarthome_sdk_rs::Client>, action: Action) {
+async fn handle_action(client: Arc<Client>, action: Action) {
     trace!("Executing HMS code on Smarthome server...");
     match client
         .exec_homescript_code(action.homescript, vec![], false)
