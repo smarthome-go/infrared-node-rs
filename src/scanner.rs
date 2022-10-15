@@ -55,7 +55,7 @@ pub async fn start_scan(client: Client, device: Scanner, actions: &[Action]) -> 
 async fn handle_action(client: Arc<Client>, action: Action) {
     trace!("Executing HMS code on Smarthome server...");
     match client
-        .exec_homescript_code(action.homescript, vec![], false)
+        .exec_homescript_code(&action.homescript, vec![], false)
         .await
     {
         Ok(res) => match res.success {

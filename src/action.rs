@@ -32,7 +32,7 @@ pub async fn lint_actions<'act>(
     for action in actions {
         results.push(ActionExecRes {
             result: client
-                .exec_homescript_code(action.homescript.clone(), vec![], true)
+                .exec_homescript_code(&action.homescript.clone(), vec![], true)
                 .await?,
             name: &action.name,
         })
