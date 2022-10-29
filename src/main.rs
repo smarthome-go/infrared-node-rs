@@ -85,16 +85,17 @@ async fn main() {
                                 );
                             }
                             false => {
-                                error!(
-                            "Check failed: Homescript of action@{} contains potential issues:\n{}",
-                            res.name,
-                            res.result
-                                .errors
-                                .into_iter()
-                                .map(|r| r.to_string())
-                                .collect::<Vec<String>>()
-                                .join("\n")
-                        )
+                                error!("Action@{} contains potential issues", res.name);
+
+                                println!(
+                                    "{}",
+                                    res.result
+                                        .errors
+                                        .into_iter()
+                                        .map(|r| r.display(res.code, res.name))
+                                        .collect::<Vec<String>>()
+                                        .join("\n")
+                                );
                             }
                         }
                     }

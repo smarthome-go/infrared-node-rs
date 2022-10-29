@@ -21,6 +21,7 @@ impl Default for Action {
 pub struct ActionExecRes<'act> {
     pub result: HomescriptExecResponse,
     pub name: &'act str,
+    pub code: &'act str,
 }
 
 pub async fn lint_actions<'act>(
@@ -35,6 +36,7 @@ pub async fn lint_actions<'act>(
                 .exec_homescript_code(&action.homescript.clone(), vec![], true)
                 .await?,
             name: &action.name,
+            code: &action.homescript,
         })
     }
 
