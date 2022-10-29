@@ -65,10 +65,7 @@ async fn main() {
         match Client::new(&conf.smarthome.url, Auth::QueryToken(conf.smarthome.token)).await {
             Ok(c) => c,
             Err(e) => {
-                error!(
-                    "Could not create Smarthome client: failed to establish connection: {:?}",
-                    e
-                );
+                error!("{e}");
                 process::exit(1);
             }
         };
