@@ -1,2 +1,5 @@
-## Changelog for v0.2.1
-- Upgraded the version of `Smarthome SDK` which fixed connection issues
+## Changelog for v0.2.2
+
+- Upgraded the version of `Smarthome SDK` which allows connection to servers
+  upward of `0.4.0`
+- Removed backwards compatability with server version `< 0.4.0`
