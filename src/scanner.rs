@@ -66,15 +66,14 @@ async fn handle_action(client: Arc<Client>, action: Action) {
                 );
             }
             false => {
-                error!(
-                    "HMS execution: action@{} failed with errors:\n{}",
-                    action.name,
+                error!("HMS execution: action@{} failed", action.name);
+                eprintln!("{}",
                     res.errors
                         .into_iter()
                         .map(|r| r.to_string())
                         .collect::<Vec<String>>()
                         .join("\n")
-                )
+                );
             }
         },
         Err(e) => error!("Could not execute HMS code: Smarthome error {:?}", e),
